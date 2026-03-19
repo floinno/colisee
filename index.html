@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Colisée — Mini-encyclopédie interactive</title>
+  <meta name="description" content="Découvrez 16 faits historiques majeurs sur le Colisée de Rome avant votre visite.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    #root { max-width: 640px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <script type="text/babel">
+const { useState } = React;
+
+const facts = [
+  {
+    id: 1,
+    year: "70–80",
+    era: "apr. J.-C.",
+    title: "Construction titanesque",
+    icon: "🏗️",
+    summary: "Le Colisée a été bâti en seulement 8 à 10 ans sous les empereurs Vespasien et Titus.",
+    detail: `L'empereur Vespasien, fondateur de la dynastie flavienne, a lancé la construction du Colisée vers 70 apr. J.-C. dans un geste politique magistral. Après le règne décrié de Néron, qui avait accaparé d'immenses terrains au cœur de Rome pour sa Domus Aurea (« Maison dorée »), Vespasien a choisi délibérément d'ériger un monument public sur le site de l'ancien lac artificiel privé de Néron. Ce choix n'était pas anodin : il symbolisait la restitution au peuple romain de ce qu'un tyran avait confisqué.
+
+Le chantier a mobilisé entre 60 000 et 100 000 ouvriers, principalement des esclaves et des prisonniers de guerre ramenés de Judée après la prise de Jérusalem en 70 apr. J.-C. Les matériaux provenaient de tout l'Empire : environ 100 000 mètres cubes de travertin extraits des carrières de Tivoli, acheminés par une route spécialement construite pour l'occasion, du tuf volcanique, de la brique et du béton romain — un matériau révolutionnaire dont la recette à base de cendres volcaniques (pouzzolane) s'est révélée plus résistante que notre béton moderne.
+
+Les blocs de travertin étaient assemblés sans mortier, maintenus par environ 300 tonnes d'agrafes en fer et en bronze. Vespasien n'a pas vu l'achèvement de son œuvre : il est mort en 79, et c'est son fils Titus qui a inauguré l'amphithéâtre en 80 apr. J.-C. Son autre fils, Domitien, a ensuite ajouté l'hypogée souterrain et le dernier étage.`,
+    color: "#C4572A",
+  },
+  {
+    id: 2,
+    year: "80",
+    era: "apr. J.-C.",
+    title: "100 jours de fête inaugurale",
+    icon: "🎉",
+    summary: "L'inauguration a duré 100 jours de jeux avec des combats de gladiateurs et des chasses d'animaux.",
+    detail: `L'empereur Titus a organisé des festivités d'une ampleur sans précédent pour inaugurer le Colisée en 80 apr. J.-C. Pendant 100 jours consécutifs, le peuple romain a assisté à un programme spectaculaire et varié. Les chroniqueurs de l'époque, notamment Dion Cassius et Suétone, rapportent qu'environ 9 000 animaux sauvages ont été tués durant ces jeux inauguraux — des lions d'Afrique du Nord, des éléphants, des crocodiles du Nil, des ours, des autruches et même des girafes.
+
+Les combats de gladiateurs constituaient le point d'orgue de chaque journée, mais le programme incluait aussi des « venationes » (chasses d'animaux organisées), des exécutions publiques mises en scène comme des épisodes mythologiques, et — fait remarquable — des « naumachies », des batailles navales reconstituées. Pour ces dernières, l'arène aurait été inondée grâce à un système hydraulique sophistiqué, bien que les historiens débattent encore de la faisabilité technique de cette prouesse.
+
+Titus offrait aussi des cadeaux au public : des boules de bois étaient lancées dans les gradins, chacune portant une inscription donnant droit à de la nourriture, des vêtements, de l'or ou même des esclaves. Ces festivités avaient un objectif politique clair : asseoir la légitimité de la dynastie flavienne et s'assurer la faveur du peuple.`,
+    color: "#D4873E",
+  },
+  {
+    id: 3,
+    year: "Ier–Ve s.",
+    era: "",
+    title: "50 000 spectateurs",
+    icon: "👥",
+    summary: "L'amphithéâtre pouvait accueillir entre 50 000 et 80 000 spectateurs assis.",
+    detail: `Le Colisée est un chef-d'œuvre d'ingénierie dont les dimensions restent impressionnantes : 189 mètres de long, 156 mètres de large et 48 mètres de haut — l'équivalent d'un immeuble de 15 étages. Sa forme elliptique n'est pas un hasard : elle offrait une visibilité optimale depuis tous les gradins et permettait une meilleure distribution des charges structurelles.
+
+L'amphithéâtre comportait 80 arches d'entrée numérotées (on peut encore voir les chiffres romains gravés au-dessus de certaines), reliées à un réseau ingénieux de couloirs et d'escaliers appelés « vomitoria » — non pas parce qu'on y vomissait, mais du latin « vomare » (déverser), car ils « déversaient » les foules. Grâce à ce système, les 50 000 à 80 000 spectateurs pouvaient remplir ou quitter l'édifice en seulement 15 à 20 minutes, une performance logistique que bien des stades modernes peinent à égaler.
+
+Les places étaient strictement réparties par rang social selon un système appelé « cavea » : au niveau le plus bas (podium), les sénateurs disposaient de sièges en marbre avec leur nom gravé ; au-dessus, les chevaliers (ordre équestre) ; puis les citoyens ordinaires ; et tout en haut, dans le « maenianum summum », les femmes et les esclaves, sur des gradins en bois. L'empereur disposait d'une loge spéciale (pulvinar) sur le petit axe de l'ellipse, à l'endroit offrant la meilleure vue sur l'arène. Cette hiérarchie spatiale reproduisait fidèlement la hiérarchie sociale romaine : le Colisée était un miroir de la société.`,
+    color: "#8B6F4E",
+  },
+  {
+    id: 16,
+    year: "Ier s.",
+    era: "apr. J.-C.",
+    title: "Les deux premiers ordres : là où le visiteur marche",
+    icon: "🏛️",
+    summary: "Les premier et deuxième niveaux du Colisée, d'ordres toscan et ionique, sont le cœur du parcours de visite actuel.",
+    detail: `Lorsque vous visitez le Colisée aujourd'hui, vous circulez principalement dans les deux premiers niveaux de la façade extérieure et des galeries intérieures — et ces deux étages racontent à eux seuls une leçon magistrale d'architecture romaine. La façade est organisée selon le principe de la « superposition des ordres », une convention esthétique héritée des Grecs mais systématisée par les Romains : chaque niveau utilise un ordre architectural différent, du plus massif en bas au plus élancé en haut, créant une illusion optique de légèreté ascendante.
+
+Le premier ordre (rez-de-chaussée) utilise l'ordre toscan, la version romaine simplifiée du dorique grec. Ses 80 arches sont encadrées par des demi-colonnes engagées au fût lisse, sans cannelures, coiffées de chapiteaux sobres à simple moulure arrondie (l'échine). C'est l'ordre le plus robuste et le plus dépouillé, volontairement placé à la base pour exprimer la solidité. Chaque arcade mesure environ 4,20 mètres de large et 7,05 mètres de haut, et elles étaient toutes numérotées en chiffres romains gravés dans la clé de voûte — un détail que beaucoup de visiteurs manquent. Ces numéros correspondaient aux « tessères » (jetons d'entrée) distribuées aux spectateurs : un système de billetterie vieux de 2 000 ans !
+
+Quatre des 80 arches n'étaient pas numérotées : les entrées principales situées sur les axes de l'ellipse. L'entrée nord (aujourd'hui encore l'entrée principale des visiteurs) et l'entrée sud étaient réservées aux processions d'ouverture des jeux. L'entrée est menait directement à la loge impériale, tandis que l'entrée ouest débouchait sur la « Porta Libitinaria » (porte de Libitina, déesse des funérailles), par laquelle on évacuait les corps des combattants tués. Détail frappant dans la galerie du premier niveau : les voûtes en berceau des couloirs annulaires sont en béton romain et atteignent près de 10 mètres de hauteur. Des traces d'enduit peint et de stucs décoratifs sont encore visibles par endroits, rappelant que ces galeries étaient autrefois richement décorées de fresques, de moulures colorées et de statues placées dans chaque arcade — 80 statues au total, aujourd'hui toutes disparues.
+
+Le deuxième ordre (premier étage) adopte l'ordre ionique, reconnaissable à ses chapiteaux ornés de deux volutes latérales enroulées en spirale — un motif élégant que l'on peut encore observer sur les colonnes de la façade nord, la mieux conservée. Les proportions changent subtilement : les colonnes sont plus fines et plus élancées qu'au niveau inférieur, accentuant l'effet de légèreté progressive voulu par les architectes. Ce niveau abritait les gradins de la « maeniana prima », où siégeaient les chevaliers. C'est depuis la galerie extérieure de ce niveau que l'on obtient aujourd'hui les vues les plus spectaculaires sur l'intérieur du Colisée et sur l'hypogée en contrebas — le point photo par excellence.
+
+Entre le premier et le deuxième niveau, en observant attentivement les blocs de travertin, on remarque des milliers de trous réguliers percés dans la pierre. Ce ne sont pas des impacts ni des défauts : ce sont les traces de l'extraction systématique des agrafes métalliques qui maintenaient les blocs assemblés sans mortier. Au Moyen Âge, des générations de pillards ont creusé chaque bloc pour en arracher les agrafes et les fondre — on estime qu'environ 300 tonnes de métal ont été ainsi récupérées.
+
+Anecdote surprenante : des graffitis antiques ont été retrouvés sur les murs des galeries des premier et deuxième niveaux, gravés par les spectateurs eux-mêmes il y a près de 2 000 ans. On y trouve des commentaires sur les combats (« Celadus le Thrace fait soupirer les filles »), des caricatures, des comptes de paris, et même des dessins de gladiateurs en action — l'équivalent antique des tweets de supporters sportifs. Certains de ces graffitis sont encore visibles mais protégés, et des campagnes photographiques récentes ont permis d'en révéler des dizaines d'autres, effacés par l'érosion mais lisibles en lumière rasante.`,
+    color: "#7B6853",
+  },
+  {
+    id: 4,
+    year: "Ier–IIIe s.",
+    era: "",
+    title: "Le velum, ancêtre du toit rétractable",
+    icon: "⛵",
+    summary: "Un immense auvent en toile protégeait les spectateurs du soleil, manœuvré par des marins.",
+    detail: `Le « velarium » reste l'un des aspects les plus fascinants et les plus débattus du Colisée. Il s'agissait d'une gigantesque voile rétractable, probablement en lin ou en coton, tendue au-dessus des gradins pour protéger les spectateurs du soleil brûlant de Rome et des intempéries. Son déploiement était confié à un détachement de 1 000 marins de la flotte impériale basée à Misène (près de Naples), les seuls professionnels maîtrisant les techniques de cordage nécessaires.
+
+Ces marins étaient casernés dans une caserne dédiée (Castra Misenatium) située à proximité du Colisée, dont on a retrouvé les vestiges. Le système reposait sur 240 mâts en bois fichés dans des consoles en pierre (les corbels) visibles au sommet de la façade extérieure — on peut encore les observer aujourd'hui. Des cordages complexes permettaient de déployer ou de rétracter les sections de toile selon la position du soleil.
+
+Les ingénieurs modernes qui ont étudié ce mécanisme estiment que c'était une prouesse technique extraordinaire : couvrir une surface elliptique de près de 20 000 mètres carrés avec une toile soumise aux vents n'avait rien de trivial. Certaines reconstitutions numériques suggèrent que le velarium ne couvrait pas entièrement le centre de l'arène, laissant un oculus ouvert, un peu comme le Panthéon.
+
+Ce système ingénieux a directement inspiré les architectes de stades modernes : le toit rétractable du Stade olympique de Montréal ou celui du AT&T Stadium de Dallas sont les descendants directs du velarium romain.`,
+    color: "#2E6B62",
+  },
+  {
+    id: 5,
+    year: "Ier–Ve s.",
+    era: "",
+    title: "L'hypogée : les coulisses du spectacle",
+    icon: "🔦",
+    summary: "Sous l'arène, un réseau souterrain cachait les animaux, gladiateurs et machineries.",
+    detail: `L'hypogée — du grec « hypo » (sous) et « gê » (terre) — est le réseau souterrain situé sous le plancher de l'arène, ajouté par l'empereur Domitien peu après l'inauguration. C'est un labyrinthe fascinant de tunnels, de chambres et de couloirs répartis sur deux niveaux, couvrant une surface d'environ 6 000 mètres carrés. C'était véritablement les « coulisses » du spectacle.
+
+On y trouvait les cages des animaux sauvages, les salles d'armes des gladiateurs, des infirmeries de fortune, des réserves d'accessoires et de décors, ainsi qu'un réseau complexe de machineries. Le système le plus impressionnant était celui des monte-charges : au moins 28 élévateurs actionnés par des treuils à contrepoids permettaient de hisser des animaux, des gladiateurs ou des éléments de décor directement sur l'arène à travers des trappes dissimulées dans le plancher. Imaginez la surprise du public quand un lion surgissait soudainement du sol !
+
+Des tunnels reliaient l'hypogée à des bâtiments extérieurs : le Ludus Magnus (la plus grande école de gladiateurs de Rome, dont les ruines sont visibles juste à côté), des entrepôts d'armes et même, selon certaines sources, au palais impérial sur le Palatin, permettant à l'empereur d'arriver sans traverser la foule. Des systèmes de canalisations servaient à évacuer le sang et les déchets, et peut-être aussi à inonder l'arène pour les naumachies dans les premières années.
+
+Aujourd'hui, le plancher de l'arène ayant disparu, l'hypogée est visible à ciel ouvert et constitue l'une des parties les plus émouvantes de la visite, offrant une plongée littérale dans les entrailles de la machine à spectacles romaine.`,
+    color: "#5B4A3F",
+  },
+  {
+    id: 6,
+    year: "Ier–IIIe s.",
+    era: "",
+    title: "Les gladiateurs : stars et esclaves",
+    icon: "🗡️",
+    summary: "Les gladiateurs étaient un mélange complexe d'esclaves, de condamnés et de volontaires en quête de gloire.",
+    detail: `L'image populaire du gladiateur — un esclave enchaîné forcé de se battre à mort — est une simplification considérable d'une réalité beaucoup plus complexe et nuancée. Les gladiateurs formaient une catégorie sociale à part dans le monde romain, un mélange fascinant d'esclaves, de prisonniers de guerre, de condamnés de droit commun (damnati), mais aussi de volontaires libres (auctorati) qui choisissaient cette carrière pour l'argent, la gloire ou par goût du risque. Certains historiens estiment que jusqu'à un quart des gladiateurs étaient des volontaires.
+
+Leur entraînement était rigoureux et coûteux, dispensé dans des écoles spécialisées (ludi) par des entraîneurs professionnels (doctores). Le Ludus Magnus, la plus grande école de gladiateurs de Rome, était situé juste à côté du Colisée et relié à l'arène par un tunnel souterrain — ses ruines sont encore visibles aujourd'hui.
+
+Les gladiateurs étaient classés par spécialités de combat, chacune avec un équipement et des techniques propres : le « murmillo » portait un casque à cimier en forme de poisson et un grand bouclier rectangulaire ; le « retiarius » combattait avec un filet et un trident ; le « secutor » était le poursuivant lourdement blindé ; le « thraex » (Thrace) portait un petit bouclier rond et une épée courbe. Les combats étaient organisés selon des règles précises, arbitrés par un « summa rudis », et ne se terminaient pas systématiquement par la mort d'un combattant — contrairement à ce que montre Hollywood.
+
+Un gladiateur expérimenté représentait un investissement considérable pour son propriétaire (lanista), et sa mort était une perte financière. Les études d'ossements retrouvés à Éphèse montrent qu'ils bénéficiaient d'une alimentation riche et de soins médicaux avancés.
+
+Paradoxalement, malgré leur statut social inférieur (infamia), les gladiateurs les plus célèbres jouissaient d'une immense popularité comparable à celle des stars du sport actuelles : leurs noms étaient gravés sur les murs, ils recevaient des cadeaux de fans, et certains avaient des liaisons notoires avec des femmes de la haute société romaine.`,
+    color: "#9B4D3A",
+  },
+  {
+    id: 7,
+    year: "Ier–IIIe s.",
+    era: "",
+    title: "Les naumachies : batailles navales dans l'arène",
+    icon: "🚢",
+    summary: "L'arène pouvait être inondée pour recréer des batailles navales grandeur nature.",
+    detail: `Parmi tous les spectacles organisés au Colisée, les naumachies — des reconstitutions de batailles navales — restent les plus extraordinaires et les plus débattus par les historiens. Le concept existait avant le Colisée : Jules César avait déjà organisé une naumachie en 46 av. J.-C. dans un bassin creusé près du Tibre, et Auguste en avait fait de même en 2 av. J.-C. sur un lac artificiel.
+
+Mais l'idée de reproduire cet exploit à l'intérieur d'un amphithéâtre relevait d'un tout autre défi technique. Les sources antiques, notamment Dion Cassius et Martial, affirment que l'arène du Colisée a effectivement été inondée lors des jeux inauguraux de Titus en 80 apr. J.-C. Le système hydraulique nécessaire aurait impliqué un réseau de canalisations reliées à l'aqueduc voisin (probablement l'Aqua Claudia), des vannes de contrôle, et un système d'étanchéification de l'arène. De petits navires de guerre auraient navigué dans un bassin d'eau d'environ un mètre de profondeur, avec des combattants qui s'affrontaient à bord.
+
+Cependant, cette possibilité n'a existé que pendant une courte période : lorsque l'empereur Domitien a fait construire l'hypogée souterrain dans les années 80, l'inondation de l'arène est devenue physiquement impossible. Les naumachies ont alors été déplacées vers des sites extérieurs dédiés.
+
+La question de savoir si les naumachies ont réellement eu lieu dans le Colisée ou si les auteurs antiques ont confondu le lieu avec d'autres sites reste un sujet de débat académique passionnant. Des fouilles récentes ont cependant mis en évidence des traces de canalisations hydrauliques compatibles avec cette hypothèse, ce qui tend à confirmer les récits antiques au moins pour la période précédant la construction de l'hypogée.`,
+    color: "#2A6496",
+  },
+  {
+    id: 8,
+    year: "404",
+    era: "apr. J.-C.",
+    title: "Fin des combats de gladiateurs",
+    icon: "⚔️",
+    summary: "L'empereur Honorius interdit définitivement les combats de gladiateurs.",
+    detail: `La fin des combats de gladiateurs n'a pas été un événement soudain mais l'aboutissement d'un long processus lié à la christianisation de l'Empire romain. Dès le IVe siècle, les Pères de l'Église avaient dénoncé la barbarie des jeux de l'arène. L'empereur Constantin, premier empereur chrétien, avait promulgué un édit en 325 limitant les combats, mais sans grand effet concret.
+
+C'est en 404 que l'empereur Honorius a officiellement interdit les combats de gladiateurs, peut-être sous l'influence d'un événement marquant rapporté par l'historien Théodoret de Cyr : un moine chrétien d'Orient nommé Télémaque serait descendu dans l'arène pour séparer des gladiateurs en plein combat, et aurait été lynché par la foule furieuse d'être privée de son spectacle. Honorius, bouleversé par ce sacrifice, aurait alors décrété l'interdiction définitive.
+
+Que cette histoire soit authentique ou embellie par la tradition chrétienne, elle illustre bien le choc culturel entre les valeurs romaines traditionnelles et la morale chrétienne montante. Il faut cependant noter que l'interdiction n'a pas mis fin à tous les spectacles : les « venationes » (chasses d'animaux) ont continué jusqu'en 523 apr. J.-C.
+
+La fin des jeux a aussi des causes économiques : l'Empire d'Occident, affaibli et appauvri, n'avait plus les moyens de financer ces spectacles extrêmement coûteux — l'achat, l'entretien et l'entraînement des gladiateurs et des animaux exotiques représentaient des sommes colossales que le trésor impérial en déclin ne pouvait plus supporter.`,
+    color: "#7A3B2E",
+  },
+  {
+    id: 9,
+    year: "Ve–XIVe s.",
+    era: "",
+    title: "Carrière de pierre géante",
+    icon: "🪨",
+    summary: "Pendant des siècles, le Colisée a été pillé pour construire palais et églises de Rome.",
+    detail: `Après la chute de l'Empire romain d'Occident en 476, le Colisée a entamé une longue période de déclin et de transformation qui a duré près d'un millénaire. Dès le VIe siècle, l'amphithéâtre a cessé d'accueillir des spectacles et a connu des usages variés et parfois surprenants : il a servi de cimetière, de forteresse pour les familles nobles romaines (notamment les Frangipane au XIIe siècle), d'atelier pour des artisans, de logement pour des squatteurs, et même de sanctuaire religieux.
+
+Mais le plus destructeur a été son utilisation comme carrière de matériaux de construction. Pendant des siècles, Romains et papes ont prélevé systématiquement ses pierres de travertin, ses marbres, ses agrafes en bronze et en fer pour bâtir d'autres monuments. La liste des édifices construits avec les pierres du Colisée est stupéfiante : la basilique Saint-Pierre au Vatican, le Palazzo Venezia, le Palazzo Barberini, le Palazzo Cancelleria, et même le port de Ripetta sur le Tibre.
+
+Les trous que l'on voit aujourd'hui dans les blocs de travertin de la façade ne sont pas des marques décoratives : ce sont les traces laissées par l'extraction des agrafes en bronze qui maintenaient les blocs ensemble, fondues pour en récupérer le métal précieux.
+
+Un tremblement de terre majeur en 1349 a provoqué l'effondrement de tout le côté sud de la façade extérieure, et les pierres tombées ont été immédiatement récupérées comme matériaux de construction. Au total, on estime que les deux tiers de la structure originale ont été perdus au fil des siècles, ce qui explique l'aspect asymétrique du monument tel qu'on le voit aujourd'hui.`,
+    color: "#6B5B73",
+  },
+  {
+    id: 10,
+    year: "Ier–Ve s.",
+    era: "",
+    title: "La flore unique du Colisée",
+    icon: "🌿",
+    summary: "Le Colisée abrite un écosystème botanique exceptionnel avec des centaines d'espèces de plantes.",
+    detail: `L'un des aspects les plus inattendus du Colisée est son extraordinaire richesse botanique, qui en fait un site d'intérêt scientifique autant qu'historique. Dès le XIXe siècle, des botanistes ont commencé à cataloguer la flore remarquable qui prospérait dans les ruines de l'amphithéâtre.
+
+Le premier inventaire systématique a été réalisé en 1643 par Domenico Panaroli, médecin et botaniste romain, mais c'est surtout le travail monumental de Richard Deakin, botaniste anglais, qui a marqué les esprits. En 1855, Deakin a publié « Flora of the Colosseum of Rome », dans lequel il répertoriait pas moins de 420 espèces de plantes différentes poussant dans les ruines.
+
+Parmi elles se trouvaient des espèces méditerranéennes communes, mais aussi des plantes exotiques provenant d'Afrique du Nord, d'Asie et du Moyen-Orient — des régions d'où étaient importés les animaux pour les jeux. L'hypothèse la plus fascinante est que les graines de ces plantes auraient été transportées dans la fourrure et le système digestif des animaux sauvages amenés au Colisée, ou dans le foin qui leur servait de litière.
+
+Le microclimat particulier créé par les ruines — des zones d'ombre humides, des parois chauffées par le soleil, des niches protégées du vent — a permis à ces espèces de survivre loin de leur habitat naturel. Les campagnes de restauration modernes ont malheureusement réduit cette diversité botanique : le nettoyage des murs et l'application de biocides pour protéger la pierre ont éliminé de nombreuses espèces.
+
+Aujourd'hui, les botanistes travaillent en collaboration avec les archéologues pour trouver un équilibre entre la préservation de la structure et la protection de cet héritage biologique unique, témoin indirect de la circulation des animaux et des marchandises à travers l'Empire romain.`,
+    color: "#4A7C59",
+  },
+  {
+    id: 11,
+    year: "1749",
+    era: "",
+    title: "Le pape sauve le Colisée",
+    icon: "✝️",
+    summary: "Le pape Benoît XIV a consacré le Colisée en mémoire des martyrs chrétiens, stoppant sa destruction.",
+    detail: `Le sauvetage du Colisée est paradoxalement l'œuvre de la même institution qui avait contribué à son pillage pendant des siècles. En 1749, le pape Benoît XIV a pris une décision qui allait changer le destin du monument : il l'a consacré comme lieu saint dédié à la mémoire des martyrs chrétiens qui y auraient été persécutés et mis à mort.
+
+Il a fait installer des chemins de croix et une grande croix chrétienne dans l'arène, transformant l'ancien lieu de divertissement païen en un mémorial de la foi. Cette consécration a immédiatement mis fin au pillage en rendant sacrilège toute dégradation du monument.
+
+Cependant, les historiens modernes sont beaucoup plus nuancés sur la réalité historique des martyres chrétiens dans le Colisée. Si les persécutions de chrétiens dans l'Empire romain sont un fait établi, les preuves archéologiques et textuelles que le Colisée en ait été un lieu majeur sont ténues. L'image populaire de chrétiens jetés aux lions spécifiquement dans le Colisée relève davantage de la tradition que de l'histoire documentée.
+
+Les papes suivants ont poursuivi l'effort de conservation : des contreforts massifs ont été ajoutés pour stabiliser les parties menacées d'effondrement (ceux de Stern en 1807 et de Valadier en 1827 sont toujours visibles et font partie intégrante de la silhouette actuelle du monument).
+
+La croix installée par Benoît XIV est toujours présente dans l'arène aujourd'hui, et chaque Vendredi saint, le pape y préside un chemin de croix solennel retransmis dans le monde entier.`,
+    color: "#3D5A80",
+  },
+  {
+    id: 12,
+    year: "1980",
+    era: "",
+    title: "Patrimoine mondial de l'UNESCO",
+    icon: "🌍",
+    summary: "Le Colisée est inscrit au patrimoine mondial et reçoit plus de 6 millions de visiteurs par an.",
+    detail: `En 1980, le centre historique de Rome, incluant le Colisée, a été inscrit sur la liste du patrimoine mondial de l'UNESCO, une reconnaissance internationale de sa valeur universelle exceptionnelle. Cette inscription a renforcé les obligations de l'Italie en matière de préservation et a contribué à attirer les financements nécessaires à la conservation du monument.
+
+Aujourd'hui, le Colisée est le monument payant le plus visité d'Italie et l'un des sites touristiques les plus populaires au monde, accueillant entre 6 et 7 millions de visiteurs chaque année — un chiffre qui a rebondi spectaculairement après la parenthèse du Covid-19.
+
+En 2007, le Colisée a reçu un autre honneur symbolique en étant élu parmi les « sept nouvelles merveilles du monde » lors d'un vote mondial organisé par la fondation New7Wonders, recueillant plus de 100 millions de votes aux côtés du Machu Picchu, du Taj Mahal et de la Grande Muraille de Chine.
+
+Au-delà du tourisme, le Colisée est devenu un puissant symbole politique et humanitaire. Depuis 1999, il est le monument emblématique de la campagne internationale contre la peine de mort : chaque fois qu'une condamnation à mort est commuée quelque part dans le monde, ou qu'un pays abolit la peine capitale, l'éclairage nocturne du Colisée passe du blanc au doré pendant 48 heures.
+
+La gestion du site reste cependant un défi permanent : concilier la préservation d'une structure vieille de près de 2 000 ans avec l'afflux massif de visiteurs, la pollution urbaine, les vibrations du métro qui passe juste en dessous, et les effets du changement climatique nécessite des investissements constants et une expertise de pointe.`,
+    color: "#1B813E",
+  },
+  {
+    id: 13,
+    year: "2013–2016",
+    era: "",
+    title: "La grande restauration financée par Tod's",
+    icon: "✨",
+    summary: "Le groupe de luxe Tod's a financé un nettoyage spectaculaire de la façade pour 25 millions d'euros.",
+    detail: `En 2013, le Colisée a entamé sa plus grande campagne de restauration depuis l'Antiquité, financée par un mécénat privé d'un genre nouveau en Italie. Le groupe de luxe italien Tod's, dirigé par l'entrepreneur Diego Della Valle, a investi 25 millions d'euros dans un projet de nettoyage et de restauration de la façade extérieure, en échange de droits d'image sur le monument pendant 15 ans.
+
+Ce partenariat public-privé, le premier de cette envergure pour un monument italien, a fait l'objet de vifs débats. Les partisans saluaient une solution pragmatique face à la pénurie chronique de fonds publics pour la conservation du patrimoine ; les critiques dénonçaient une « privatisation » rampante des monuments nationaux.
+
+Les travaux eux-mêmes ont été spectaculaires : des équipes de restaurateurs spécialisés ont nettoyé méticuleusement chaque arcade de la façade nord, éliminant des siècles de pollution, de suie, de mousse et de croûtes calcaires noircies par les gaz d'échappement. Le résultat a été saisissant : la pierre de travertin a retrouvé une teinte chaude et dorée que les Romains n'avaient pas vue depuis des générations.
+
+La restauration a également permis de découvrir des traces de peinture rouge et bleue sur certains éléments décoratifs, rappelant que le Colisée, comme la plupart des monuments antiques, n'était pas blanc mais richement coloré.
+
+Ce chantier a relancé un débat plus large en Italie sur le recours au mécénat privé pour la conservation d'un patrimoine colossal que l'État seul ne peut plus entretenir — un débat qui reste d'actualité et qui a depuis inspiré des initiatives similaires pour d'autres monuments.`,
+    color: "#B8860B",
+  },
+  {
+    id: 14,
+    year: "2023–2028",
+    era: "",
+    title: "La reconstruction de l'arène",
+    icon: "🔧",
+    summary: "Un projet ambitieux vise à reconstruire le plancher de l'arène pour accueillir des événements culturels.",
+    detail: `Le gouvernement italien a lancé l'un des projets de restauration les plus ambitieux et les plus débattus de l'histoire récente du Colisée : la reconstruction du plancher de l'arène, disparu depuis le XIXe siècle lorsque des fouilles archéologiques ont mis au jour l'hypogée souterrain.
+
+Le projet, confié à l'ingénieur milanais Milan Ingegneria après un concours international, prévoit l'installation d'un sol rétractable constitué de lattes de bois de carbone et d'accoya (un bois modifié ultra-résistant) montées sur une structure légère en acier et en aluminium. Ce plancher high-tech pourra être ouvert ou fermé par sections, permettant tantôt de protéger l'hypogée des intempéries, tantôt de le laisser visible pour les visiteurs.
+
+L'objectif est triple : d'abord, permettre aux visiteurs de se tenir au centre de l'amphithéâtre et de vivre la perspective qu'avaient les gladiateurs en regardant vers les gradins — une expérience émotionnelle actuellement impossible. Ensuite, accueillir des événements culturels de prestige dans un cadre historique unique. Enfin, protéger les structures souterraines fragiles des infiltrations d'eau de pluie.
+
+Le projet n'est pas sans controverses : certains archéologues craignent que cette reconstruction ne dénature le monument en le transformant en salle de spectacle commerciale. D'autres soulignent qu'historiquement, l'arène a toujours eu un plancher et que le reconstruire revient simplement à restaurer l'état d'origine.
+
+Le budget est estimé à environ 18,5 millions d'euros, financés en partie par les recettes de billetterie du Colisée lui-même.`,
+    color: "#E07A38",
+  },
+  {
+    id: 15,
+    year: "Ier–Ve s.",
+    era: "",
+    title: "Le Colisée et la mort : mythes et réalités",
+    icon: "💀",
+    summary: "Le nombre de morts dans l'arène fait l'objet de débats historiques passionnés.",
+    detail: `La question du nombre de personnes et d'animaux ayant péri dans le Colisée au fil des siècles alimente les fantasmes et les débats depuis longtemps. Les chiffres les plus souvent cités — 400 000 morts humaines et plus d'un million d'animaux tués — proviennent d'extrapolations à partir de sources antiques fragmentaires et sont considérés par la plupart des historiens modernes comme largement exagérés.
+
+Les « munera » (combats de gladiateurs) étaient les plus célèbres mais pas les plus meurtriers : les gladiateurs étaient des combattants entraînés et coûteux, et les études récentes estiment qu'un gladiateur professionnel avait une chance sur cinq à une chance sur dix de mourir à chaque combat — un risque élevé certes, mais loin du massacre systématique imaginé par Hollywood.
+
+En revanche, les « noxii » — des condamnés à mort — étaient exécutés sans aucune chance de survie, souvent de manière spectaculaire et cruelle : exposés aux bêtes sauvages (damnatio ad bestias), brûlés vifs, ou contraints de s'entre-tuer dans des mises en scène inspirées de la mythologie. Ces exécutions avaient lieu à la mi-journée, entre les chasses du matin et les combats de gladiateurs de l'après-midi.
+
+Les « venationes » (chasses d'animaux) ont quant à elles eu un impact écologique considérable et documenté : l'appétit de Rome pour les spectacles exotiques a contribué à l'extinction locale de certaines espèces en Afrique du Nord — les lions, les éléphants d'Afrique du Nord et les hippopotames ont disparu de régions entières pour alimenter les arènes de l'Empire. L'historien romain Trajan aurait à lui seul fait tuer 11 000 animaux lors de ses jeux triomphaux de 107 apr. J.-C.
+
+Les recherches archéologiques récentes, notamment les analyses d'ossements et les études de graffitis et d'inscriptions, permettent progressivement de construire une image plus nuancée et plus précise de la réalité de la violence dans l'arène, entre le sensationnalisme des sources anciennes et les exagérations modernes.`,
+    color: "#4A4453",
+  },
+];
+
+function VelariumIllustration() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div style={{
+      margin: "20px 0",
+      background: "linear-gradient(180deg, #F3EDE5 0%, #FAF6F1 100%)",
+      borderRadius: "12px",
+      border: "1px solid #E2D9CE",
+      padding: "20px 12px 16px",
+    }}>
+      <p style={{
+        fontSize: "12px", fontWeight: "700", textTransform: "uppercase",
+        letterSpacing: "1.5px", color: "#8B7D6B", textAlign: "center",
+        margin: "0 0 4px",
+      }}>Le Velarium</p>
+      <p style={{
+        fontSize: "11px", color: "#A89B8C", textAlign: "center",
+        margin: "0 0 14px",
+      }}>Coupe transversale schématique du Colisée</p>
+
+      <svg viewBox="0 0 400 260" style={{ width: "100%", height: "auto", display: "block" }}>
+        {/* Sky */}
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={isOpen ? "#87CEEB" : "#87CEEB"} />
+            <stop offset="100%" stopColor={isOpen ? "#B8DCF0" : "#D4E8F2"} />
+          </linearGradient>
+          <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#D4C4A8" />
+            <stop offset="100%" stopColor="#B8A88C" />
+          </linearGradient>
+          <linearGradient id="stoneD" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#C4B498" />
+            <stop offset="100%" stopColor="#A8987C" />
+          </linearGradient>
+          <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#E8D8B8" />
+            <stop offset="100%" stopColor="#D4C4A0" />
+          </linearGradient>
+          <linearGradient id="fabric" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#F5E6D0" />
+            <stop offset="60%" stopColor="#EDD8BC" />
+            <stop offset="100%" stopColor="#E0C8A4" />
+          </linearGradient>
+          <linearGradient id="fabricShadow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#D8C8A8" />
+            <stop offset="100%" stopColor="#C8B898" />
+          </linearGradient>
+          <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#FFE066" />
+            <stop offset="100%" stopColor="#FFD033" />
+          </linearGradient>
+        </defs>
+
+        <rect x="0" y="0" width="400" height="260" fill="url(#sky)" rx="8" />
+
+        {/* Sun */}
+        <circle cx={isOpen ? 320 : 320} cy="35" r="22" fill="url(#sun)" opacity="0.9" />
+        {isOpen && <>
+          {[0,45,90,135,180,225,270,315].map(angle => {
+            const rad = angle * Math.PI / 180;
+            const x1 = 320 + Math.cos(rad) * 28;
+            const y1 = 35 + Math.sin(rad) * 28;
+            const x2 = 320 + Math.cos(rad) * 36;
+            const y2 = 35 + Math.sin(rad) * 36;
+            return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#FFD033" strokeWidth="2" strokeLinecap="round" opacity="0.7" />;
+          })}
+        </>}
+
+        {/* Shadow on arena when closed */}
+        {!isOpen && (
+          <rect x="100" y="195" width="200" height="30" fill="#C8B898" opacity="0.35" rx="2" />
+        )}
+
+        {/* Arena floor */}
+        <rect x="90" y="195" width="220" height="30" fill="url(#sand)" rx="2" />
+
+        {/* Hypogee hint */}
+        <rect x="100" y="225" width="200" height="20" fill="#8B7D6B" opacity="0.3" rx="2" />
+        <line x1="140" y1="225" x2="140" y2="245" stroke="#A89B8C" strokeWidth="0.5" />
+        <line x1="180" y1="225" x2="180" y2="245" stroke="#A89B8C" strokeWidth="0.5" />
+        <line x1="220" y1="225" x2="220" y2="245" stroke="#A89B8C" strokeWidth="0.5" />
+        <line x1="260" y1="225" x2="260" y2="245" stroke="#A89B8C" strokeWidth="0.5" />
+        <text x="200" y="239" textAnchor="middle" fontSize="8" fill="#8B7D6B" fontFamily="Helvetica, sans-serif">HYPOGÉE</text>
+
+        {/* Left wall - 4 tiers */}
+        <g>
+          {/* Tier 4 - top */}
+          <rect x="30" y="75" width="60" height="30" fill="url(#stone)" rx="2" />
+          <rect x="35" y="80" width="12" height="20" fill="#C8B898" rx="1" opacity="0.5" />
+          <rect x="52" y="80" width="12" height="20" fill="#C8B898" rx="1" opacity="0.5" />
+          <rect x="69" y="80" width="12" height="20" fill="#C8B898" rx="1" opacity="0.5" />
+          {/* Tier 3 */}
+          <rect x="22" y="105" width="76" height="30" fill="url(#stone)" rx="2" />
+          <rect x="28" y="110" width="14" height="20" fill="#C8B898" rx="1" opacity="0.6" />
+          <rect x="47" y="110" width="14" height="20" fill="#C8B898" rx="1" opacity="0.6" />
+          <rect x="66" y="110" width="14" height="20" fill="#C8B898" rx="1" opacity="0.6" />
+          <rect x="85" y="110" width="8" height="20" fill="#C8B898" rx="1" opacity="0.4" />
+          {/* Tier 2 - Ionic */}
+          <rect x="14" y="135" width="84" height="30" fill="url(#stoneD)" rx="2" />
+          <rect x="20" y="140" width="16" height="22" fill="#B8A88C" rx="1" opacity="0.6" />
+          <rect x="40" y="140" width="16" height="22" fill="#B8A88C" rx="1" opacity="0.6" />
+          <rect x="60" y="140" width="16" height="22" fill="#B8A88C" rx="1" opacity="0.6" />
+          <rect x="80" y="140" width="12" height="22" fill="#B8A88C" rx="1" opacity="0.4" />
+          {/* Tier 1 - Tuscan */}
+          <rect x="6" y="165" width="92" height="30" fill="url(#stoneD)" rx="2" />
+          <rect x="12" y="170" width="18" height="22" fill="#A8987C" rx="2" opacity="0.6" />
+          <rect x="34" y="170" width="18" height="22" fill="#A8987C" rx="2" opacity="0.6" />
+          <rect x="56" y="170" width="18" height="22" fill="#A8987C" rx="2" opacity="0.6" />
+          <rect x="78" y="170" width="16" height="22" fill="#A8987C" rx="2" opacity="0.4" />
+        </g>
+
+        {/* Right wall - mirror */}
+        <g>
+          <rect x="310" y="75" width="60" height="30" fill="url(#stone)" rx="2" />
+          <rect x="315" y="80" width="12" height="20" fill="#C8B898" rx="1" opacity="0.5" />
+          <rect x="332" y="80" width="12" height="20" fill="#C8B898" rx="1" opacity="0.5" />
+          <rect x="349" y="80" width="12" height="20" fill="#C8B898" rx="1" opacity="0.5" />
+
+          <rect x="302" y="105" width="76" height="30" fill="url(#stone)" rx="2" />
+          <rect x="308" y="110" width="14" height="20" fill="#C8B898" rx="1" opacity="0.6" />
+          <rect x="327" y="110" width="14" height="20" fill="#C8B898" rx="1" opacity="0.6" />
+          <rect x="346" y="110" width="14" height="20" fill="#C8B898" rx="1" opacity="0.6" />
+          <rect x="364" y="110" width="8" height="20" fill="#C8B898" rx="1" opacity="0.4" />
+
+          <rect x="302" y="135" width="84" height="30" fill="url(#stoneD)" rx="2" />
+          <rect x="308" y="140" width="16" height="22" fill="#B8A88C" rx="1" opacity="0.6" />
+          <rect x="328" y="140" width="16" height="22" fill="#B8A88C" rx="1" opacity="0.6" />
+          <rect x="348" y="140" width="16" height="22" fill="#B8A88C" rx="1" opacity="0.6" />
+          <rect x="368" y="140" width="12" height="22" fill="#B8A88C" rx="1" opacity="0.4" />
+
+          <rect x="302" y="165" width="92" height="30" fill="url(#stoneD)" rx="2" />
+          <rect x="308" y="170" width="18" height="22" fill="#A8987C" rx="2" opacity="0.6" />
+          <rect x="330" y="170" width="18" height="22" fill="#A8987C" rx="2" opacity="0.6" />
+          <rect x="352" y="170" width="18" height="22" fill="#A8987C" rx="2" opacity="0.6" />
+          <rect x="374" y="170" width="16" height="22" fill="#A8987C" rx="2" opacity="0.4" />
+        </g>
+
+        {/* Spectators dots */}
+        {[
+          [42,82],[55,82],[68,82],[78,82],
+          [34,112],[50,112],[66,112],[82,112],
+          [28,142],[46,142],[64,142],[80,142],
+          [322,82],[335,82],[348,82],[358,82],
+          [314,112],[330,112],[346,112],[362,112],
+          [314,142],[330,142],[346,142],[362,142],
+        ].map(([x,y], i) => (
+          <circle key={`s${i}`} cx={x} cy={y} r="3" fill="#7A6B5B" opacity="0.5" />
+        ))}
+
+        {/* Masts on top of walls */}
+        <line x1="55" y1="68" x2="55" y2="75" stroke="#8B7D6B" strokeWidth="2" strokeLinecap="round" />
+        <line x1="80" y1="68" x2="80" y2="75" stroke="#8B7D6B" strokeWidth="2" strokeLinecap="round" />
+        <line x1="345" y1="68" x2="345" y2="75" stroke="#8B7D6B" strokeWidth="2" strokeLinecap="round" />
+        <line x1="320" y1="68" x2="320" y2="75" stroke="#8B7D6B" strokeWidth="2" strokeLinecap="round" />
+
+        {/* Ropes from masts */}
+        {!isOpen ? (
+          <>
+            {/* CLOSED: Velarium deployed */}
+            {/* Left sail */}
+            <path d={`M 55 68 Q 120 55 200 62`} fill="none" stroke="#B8A88C" strokeWidth="0.8" strokeDasharray="3,2" />
+            <path d={`M 80 68 Q 130 58 200 65`} fill="none" stroke="#B8A88C" strokeWidth="0.8" strokeDasharray="3,2" />
+            {/* Right sail */}
+            <path d={`M 345 68 Q 280 55 200 62`} fill="none" stroke="#B8A88C" strokeWidth="0.8" strokeDasharray="3,2" />
+            <path d={`M 320 68 Q 270 58 200 65`} fill="none" stroke="#B8A88C" strokeWidth="0.8" strokeDasharray="3,2" />
+
+            {/* Fabric - left side */}
+            <path d={`M 55 68 Q 90 52 140 56 Q 170 58 200 62 L 200 72 Q 170 68 140 66 Q 90 62 55 75 Z`}
+              fill="url(#fabric)" stroke="#D4C0A0" strokeWidth="0.5" opacity="0.92" />
+            {/* Fabric folds left */}
+            <path d={`M 80 60 Q 100 58 120 59`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+            <path d={`M 100 62 Q 130 60 160 61`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+
+            {/* Fabric - right side */}
+            <path d={`M 345 68 Q 310 52 260 56 Q 230 58 200 62 L 200 72 Q 230 68 260 66 Q 310 62 345 75 Z`}
+              fill="url(#fabric)" stroke="#D4C0A0" strokeWidth="0.5" opacity="0.92" />
+            {/* Fabric folds right */}
+            <path d={`M 320 60 Q 300 58 280 59`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+            <path d={`M 300 62 Q 270 60 240 61`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+
+            {/* Central oculus opening */}
+            <ellipse cx="200" cy="67" rx="18" ry="5" fill="#87CEEB" opacity="0.6" stroke="#D4C0A0" strokeWidth="0.5" />
+
+            {/* Shadow cast by velarium on spectators */}
+            <rect x="30" y="75" width="60" height="30" fill="#8B7D6B" opacity="0.12" rx="2" />
+            <rect x="310" y="75" width="60" height="30" fill="#8B7D6B" opacity="0.12" rx="2" />
+          </>
+        ) : (
+          <>
+            {/* OPEN: Velarium retracted near masts */}
+            {/* Left gathered fabric */}
+            <path d={`M 50 68 Q 55 60 65 62 Q 72 64 80 68 L 80 75 Q 70 72 62 70 Q 55 72 50 75 Z`}
+              fill="url(#fabric)" stroke="#D4C0A0" strokeWidth="0.5" opacity="0.9" />
+            <path d={`M 55 64 Q 60 62 65 63`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+            <path d={`M 60 66 Q 67 64 72 66`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+
+            {/* Right gathered fabric */}
+            <path d={`M 320 68 Q 328 60 338 62 Q 342 64 350 68 L 350 75 Q 342 72 335 70 Q 328 72 320 75 Z`}
+              fill="url(#fabric)" stroke="#D4C0A0" strokeWidth="0.5" opacity="0.9" />
+            <path d={`M 325 64 Q 332 62 338 63`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+            <path d={`M 330 66 Q 337 64 342 66`} fill="none" stroke="#C8B898" strokeWidth="0.6" />
+
+            {/* Loose ropes */}
+            <path d={`M 55 68 Q 70 64 80 68`} fill="none" stroke="#B8A88C" strokeWidth="0.8" strokeDasharray="3,2" />
+            <path d={`M 320 68 Q 335 64 345 68`} fill="none" stroke="#B8A88C" strokeWidth="0.8" strokeDasharray="3,2" />
+          </>
+        )}
+
+        {/* Labels */}
+        <text x="200" y="205" textAnchor="middle" fontSize="8" fill="#8B7D6B" fontFamily="Helvetica, sans-serif" fontWeight="600">ARÈNE</text>
+
+        {/* Mast labels */}
+        <text x="67" y="64" textAnchor="middle" fontSize="6" fill="#8B7D6B" fontFamily="Helvetica, sans-serif">mâts</text>
+        <text x="333" y="64" textAnchor="middle" fontSize="6" fill="#8B7D6B" fontFamily="Helvetica, sans-serif">mâts</text>
+
+        {/* State label */}
+        <text x="200" y="20" textAnchor="middle" fontSize="11" fill="#5B4A3F" fontFamily="Helvetica, sans-serif" fontWeight="700">
+          {isOpen ? "☀️  Velarium ouvert — plein soleil" : "⛱️  Velarium déployé — spectateurs protégés"}
+        </text>
+
+        {/* Order labels */}
+        <text x="6" y="180" fontSize="6" fill="#7A6B5B" fontFamily="Helvetica, sans-serif" fontWeight="600" transform="rotate(-90, 6, 180)">TOSCAN</text>
+        <text x="6" y="150" fontSize="6" fill="#7A6B5B" fontFamily="Helvetica, sans-serif" fontWeight="600" transform="rotate(-90, 6, 150)">IONIQUE</text>
+
+      </svg>
+
+      {/* Toggle button */}
+      <div style={{ textAlign: "center", marginTop: "12px" }}>
+        <button
+          onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
+          style={{
+            background: isOpen ? "#2E6B62" : "#C4572A",
+            color: "#fff",
+            border: "none",
+            borderRadius: "20px",
+            padding: "10px 24px",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+            fontFamily: "Helvetica, sans-serif",
+            transition: "background 0.3s ease",
+          }}
+        >
+          {isOpen ? "⛵ Déployer le velarium" : "☀️ Ouvrir le velarium"}
+        </button>
+      </div>
+
+      <p style={{
+        fontSize: "11px", color: "#A89B8C", textAlign: "center",
+        margin: "12px 0 0", fontStyle: "italic", lineHeight: "1.5",
+      }}>
+        {isOpen
+          ? "Sans le velarium, les spectateurs des gradins supérieurs étaient exposés au soleil brûlant de Rome."
+          : "1 000 marins de la flotte impériale manœuvraient la toile grâce à 240 mâts et un réseau de cordages."}
+      </p>
+    </div>
+  );
+}
+
+function SizeComparison() {
+  const buildings = [
+    { name: "Stade de France", height: 46, length: 274, emoji: "🏟️", color: "#3D5A80" },
+    { name: "Colisée", height: 48, length: 189, emoji: "🏛️", color: "#C4572A" },
+    { name: "Tour Eiffel", height: 330, length: 125, emoji: "🗼", color: "#8B6F4E" },
+  ];
+
+  const maxH = 330;
+  const barAreaH = 180;
+  const scale = barAreaH / maxH;
+  const barW = 62;
+  const gap = 28;
+  const totalW = buildings.length * barW + (buildings.length - 1) * gap;
+  const startX = (totalW) / 2;
+
+  return (
+    <div style={{
+      margin: "20px 0",
+      background: "linear-gradient(180deg, #F3EDE5 0%, #FAF6F1 100%)",
+      borderRadius: "12px",
+      border: "1px solid #E2D9CE",
+      padding: "20px 12px 16px",
+    }}>
+      <p style={{
+        fontSize: "12px", fontWeight: "700", textTransform: "uppercase",
+        letterSpacing: "1.5px", color: "#8B7D6B", textAlign: "center",
+        margin: "0 0 6px",
+      }}>Comparaison des dimensions</p>
+      <p style={{
+        fontSize: "11px", color: "#A89B8C", textAlign: "center",
+        margin: "0 0 16px",
+      }}>Hauteur et longueur à la même échelle</p>
+
+      {/* Height comparison */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: "6px", marginBottom: "8px", height: `${barAreaH + 40}px` }}>
+        {buildings.map((b) => {
+          const h = b.height * scale;
+          return (
+            <div key={b.name} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: `${barW + 16}px` }}>
+              <span style={{ fontSize: "18px", marginBottom: "4px" }}>{b.emoji}</span>
+              <span style={{
+                fontSize: "13px", fontWeight: "700", color: b.color, marginBottom: "4px",
+              }}>{b.height} m</span>
+              <div style={{
+                width: `${barW}px`,
+                height: `${h}px`,
+                background: `linear-gradient(180deg, ${b.color}, ${b.color}AA)`,
+                borderRadius: "6px 6px 0 0",
+                position: "relative",
+                minHeight: "12px",
+                transition: "height 0.5s ease",
+              }} />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Base line */}
+      <div style={{ height: "2px", background: "#D5CBBD", margin: "0 8px 16px", borderRadius: "1px" }} />
+
+      {/* Length comparison */}
+      <p style={{
+        fontSize: "11px", fontWeight: "600", color: "#8B7D6B", textAlign: "center",
+        margin: "0 0 10px", textTransform: "uppercase", letterSpacing: "1px",
+      }}>Longueur au sol</p>
+      <div style={{ padding: "0 4px" }}>
+        {[...buildings].sort((a, b) => b.length - a.length).map((b) => {
+          const pct = (b.length / 274) * 100;
+          return (
+            <div key={b.name} style={{ marginBottom: "8px" }}>
+              <div style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                marginBottom: "3px",
+              }}>
+                <span style={{ fontSize: "12px", fontWeight: "600", color: "#4A3F37" }}>
+                  {b.emoji} {b.name}
+                </span>
+                <span style={{ fontSize: "12px", fontWeight: "700", color: b.color }}>
+                  {b.length} m
+                </span>
+              </div>
+              <div style={{
+                height: "10px", background: "#E8E0D5", borderRadius: "5px", overflow: "hidden",
+              }}>
+                <div style={{
+                  width: `${pct}%`, height: "100%",
+                  background: `linear-gradient(90deg, ${b.color}, ${b.color}BB)`,
+                  borderRadius: "5px",
+                  transition: "width 0.6s ease",
+                }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p style={{
+        fontSize: "11px", color: "#A89B8C", textAlign: "center",
+        margin: "12px 0 0", fontStyle: "italic", lineHeight: "1.5",
+      }}>
+        Le Colisée est 7 fois moins haut que la Tour Eiffel, mais son emprise au sol est 1,5 fois plus grande que sa base.
+      </p>
+    </div>
+  );
+}
+
+function DetailText({ text, color }) {
+  const paragraphs = text.split("\n\n");
+  return (
+    <div>
+      {paragraphs.map((para, i) => {
+        if (i === 0) {
+          const firstDot = para.indexOf(". ");
+          if (firstDot === -1) {
+            return (
+              <p key={i} style={{
+                fontSize: "15px", color: "#4A3F37", margin: "0 0 14px", lineHeight: "1.8",
+              }}>
+                <strong style={{ color: color }}>{para}</strong>
+              </p>
+            );
+          }
+          const firstSentence = para.substring(0, firstDot + 1);
+          const rest = para.substring(firstDot + 2);
+          return (
+            <p key={i} style={{
+              fontSize: "15px", color: "#4A3F37", margin: "0 0 14px", lineHeight: "1.8",
+            }}>
+              <strong style={{ color: color }}>{firstSentence}</strong>{rest ? " " + rest : ""}
+            </p>
+          );
+        }
+        return (
+          <p key={i} style={{
+            fontSize: "15px", color: "#4A3F37", margin: "0 0 14px", lineHeight: "1.8",
+          }}>
+            {para}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+function ColosseumEncyclopedia() {
+  const [selectedFact, setSelectedFact] = useState(null);
+  const [visitedFacts, setVisitedFacts] = useState(new Set());
+
+  const handleFactClick = (fact) => {
+    setSelectedFact(selectedFact?.id === fact.id ? null : fact);
+    setVisitedFacts((prev) => new Set([...prev, fact.id]));
+  };
+
+  return (
+    <div style={{
+      minHeight: "100vh",
+      background: "#FAF6F1",
+      fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif",
+      color: "#2C2420",
+      padding: "0",
+    }}>
+      {/* Header */}
+      <div style={{
+        background: "linear-gradient(145deg, #3D2B1F 0%, #5C3D2E 60%, #7A4F3A 100%)",
+        padding: "40px 24px 32px",
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute", inset: 0, opacity: 0.06,
+          backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 20px, #fff 20px, #fff 21px)",
+        }} />
+        <div style={{ fontSize: "42px", marginBottom: "8px" }}>🏛️</div>
+        <h1 style={{
+          fontSize: "28px",
+          fontWeight: "700",
+          color: "#F5E6D3",
+          margin: "0 0 6px",
+          letterSpacing: "2px",
+          textTransform: "uppercase",
+        }}>
+          Le Colisée
+        </h1>
+        <p style={{
+          fontSize: "14px",
+          color: "#C4A882",
+          margin: 0,
+          letterSpacing: "4px",
+          textTransform: "uppercase",
+        }}>
+          Amphitheatrum Flavium · Rome
+        </p>
+        <div style={{
+          marginTop: "20px",
+          display: "flex",
+          justifyContent: "center",
+          gap: "24px",
+          fontSize: "12px",
+          color: "#B89B7A",
+        }}>
+          <span>📐 189 × 156 m</span>
+          <span>📏 48 m de haut</span>
+          <span>👥 50 000 places</span>
+        </div>
+      </div>
+
+      {/* Progress */}
+      <div style={{
+        padding: "16px 24px",
+        background: "#F3EDE5",
+        borderBottom: "1px solid #E2D9CE",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}>
+        <span style={{ fontSize: "13px", color: "#8B7D6B" }}>
+          {visitedFacts.size}/{facts.length} faits explorés
+        </span>
+        <div style={{
+          flex: 1, marginLeft: "16px", marginRight: "16px",
+          height: "6px", background: "#DDD5C9", borderRadius: "3px", overflow: "hidden",
+        }}>
+          <div style={{
+            width: `${(visitedFacts.size / facts.length) * 100}%`,
+            height: "100%",
+            background: "linear-gradient(90deg, #C4572A, #D4873E)",
+            borderRadius: "3px",
+            transition: "width 0.5s ease",
+          }} />
+        </div>
+        <span style={{ fontSize: "13px", color: "#8B7D6B" }}>
+          {visitedFacts.size === facts.length ? "✨ Bravo !" : ""}
+        </span>
+      </div>
+
+      {/* Facts list */}
+      <div style={{ padding: "20px 16px 40px" }}>
+        <p style={{
+          fontSize: "14px", color: "#8B7D6B", textAlign: "center",
+          margin: "0 0 20px", fontStyle: "italic",
+        }}>
+          Touchez un fait pour découvrir les détails
+        </p>
+
+        {facts.map((fact, i) => {
+          const isOpen = selectedFact?.id === fact.id;
+          const isVisited = visitedFacts.has(fact.id);
+          return (
+            <div
+              key={fact.id}
+              onClick={() => handleFactClick(fact)}
+              style={{
+                marginBottom: "12px",
+                borderRadius: "12px",
+                overflow: "hidden",
+                cursor: "pointer",
+                background: isOpen ? "#fff" : (isVisited ? "#FDFBF8" : "#fff"),
+                border: isOpen ? `2px solid ${fact.color}` : "1px solid #E8E0D5",
+                boxShadow: isOpen
+                  ? `0 8px 24px ${fact.color}22`
+                  : "0 1px 3px rgba(0,0,0,0.04)",
+                transition: "all 0.3s ease",
+              }}
+            >
+              {/* Fact header */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "16px",
+                gap: "14px",
+              }}>
+                <div style={{
+                  width: "48px", height: "48px", borderRadius: "50%",
+                  background: isOpen
+                    ? `linear-gradient(135deg, ${fact.color}, ${fact.color}CC)`
+                    : "#F3EDE5",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: isOpen ? "22px" : "16px",
+                  flexShrink: 0,
+                  transition: "all 0.3s ease",
+                  color: isOpen ? "#fff" : fact.color,
+                  fontWeight: "700",
+                }}>
+                  {isOpen ? fact.icon : i + 1}
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: "11px",
+                    color: fact.color,
+                    fontWeight: "700",
+                    letterSpacing: "1.5px",
+                    textTransform: "uppercase",
+                    marginBottom: "3px",
+                  }}>
+                    {fact.year} {fact.era}
+                  </div>
+                  <div style={{
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    color: "#2C2420",
+                    lineHeight: "1.3",
+                  }}>
+                    {fact.title}
+                  </div>
+                </div>
+
+                <div style={{
+                  fontSize: "18px", color: "#C4A882",
+                  transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                  transition: "transform 0.3s ease",
+                  flexShrink: 0,
+                }}>
+                  ›
+                </div>
+              </div>
+
+              {/* Expanded content */}
+              {isOpen && (
+                <div style={{
+                  padding: "0 16px 20px",
+                  animation: "fadeIn 0.3s ease",
+                }}>
+                  <div style={{
+                    height: "1px",
+                    background: `linear-gradient(90deg, transparent, ${fact.color}33, transparent)`,
+                    marginBottom: "16px",
+                  }} />
+                  <p style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: fact.color,
+                    margin: "0 0 16px",
+                    lineHeight: "1.5",
+                  }}>
+                    {fact.summary}
+                  </p>
+                  <DetailText text={fact.detail} color={fact.color} />
+                  {fact.id === 1 && <SizeComparison />}
+                  {fact.id === 4 && <VelariumIllustration />}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(<ColosseumEncyclopedia />);
+  </script>
+</body>
+</html>
